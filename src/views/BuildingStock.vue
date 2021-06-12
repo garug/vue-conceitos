@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watchEffect } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 const BuildingStock = defineComponent({
@@ -30,16 +31,32 @@ const BuildingStock = defineComponent({
   setup() {
     const store = useStore();
 
+    const route = useRoute();
+
+    const router = useRouter();
+
     const climateZones = store.state.city.climateZone.available;
 
     const prevValue = store.state.climateZoneBuildingStock;
 
-    const selectedClimateZones = ref(
-      prevValue.length === 0 ? [climateZones[0]] : prevValue
-    );
+    const selectedClimateZones = ref([] as Array<string>);
+
+    if (prevValue.length > 0) {
+      selectedClimateZones.value = prevValue;
+    } else if (route.query.value) {
+      selectedClimateZones.value = (route.query.value as string).split(",");
+    } else {
+      selectedClimateZones.value = [climateZones[0]];
+    }
 
     watchEffect(() => {
-      store.commit("setClimateZoneBuildingStock", selectedClimateZones.value);
+      const value = selectedClimateZones.value;
+
+      const query = value.length > 0 ? { value: value.join(",") } : {};
+
+      router.replace({ query });
+
+      store.commit("setClimateZoneBuildingStock", value);
     });
 
     return { climateZones, selectedClimateZones };
