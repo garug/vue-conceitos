@@ -51,7 +51,27 @@
         <td>{{ measure.simplePayback }}</td>
         <td>{{ measure.incrementalCost }}</td>
       </tr>
+      <tr>
+        <td><button @click="toggle = !toggle">Toggle Details</button></td>
+      </tr>
     </table>
+
+    <p class="toggle" :class="activeCard.id === card.id && toggle && 'toggle-on'">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat,
+      erat vel molestie porta, eros neque dapibus leo, eget sagittis tellus
+      massa elementum urna. Etiam nibh nulla, tincidunt ut est iaculis, molestie
+      faucibus augue. Aenean mattis est dictum sollicitudin aliquam. Vestibulum
+      viverra orci quis tellus facilisis, in semper nibh ornare. Proin posuere
+      ipsum a mauris consectetur tempus sit amet ac quam. Nam in turpis rhoncus,
+      varius lectus a, dapibus lectus. Sed lacus leo, semper nec consequat nec,
+      condimentum sed lacus. Nunc ornare aliquet mollis. Nam felis lorem,
+      accumsan quis urna et, placerat maximus ante. Ut at nibh magna. Phasellus
+      ut elementum mi, a viverra leo. Morbi orci tellus, laoreet non lorem a,
+      ullamcorper sollicitudin libero. Curabitur tellus leo, dignissim ac metus
+      a, sollicitudin viverra orci. Aliquam erat volutpat. Quisque lorem erat,
+      laoreet ultricies tristique at, dignissim vitae leo. Aliquam gravida
+      pellentesque mauris ut volutpat.
+    </p>
 
     <hr />
   </div>
@@ -144,6 +164,8 @@ const Results = defineComponent({
       }
     }
 
+    const toggle = ref(false);
+
     onMounted(() => handlePositionActiveCard());
 
     watch(
@@ -186,6 +208,7 @@ const Results = defineComponent({
       cards,
       activeCard,
       divsCards,
+      toggle
     };
   },
 });
@@ -203,5 +226,15 @@ export default Results;
 
 .active-card {
   background: #dff9fb;
+}
+
+.toggle {
+  max-height: 0;
+  transition: all .4s;
+  overflow: hidden;
+}
+
+.toggle-on {
+  max-height: 130px;
 }
 </style>
